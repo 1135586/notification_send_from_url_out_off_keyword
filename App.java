@@ -21,25 +21,28 @@ public class App{
     //processing code below
     //that uses CONTAINS method of String object
 
-    String html = "";
-    String line = "";
     URL url = null;
     BufferedReader in = null;
+
+    StringBuilder sb = new StringBuilder();
 
     try{
         url = new URL(http_url);
         in = new BufferedReader(new InputStreamReader(url.openStream()));
 
+        String line = null;
         while ((line = in.readLine())!= null){
-            html += line;
+            sb.append(line);
         }
     } finally {
           if (in != null) in.close();
+          in = null;
+          url = null;
     }
 
     // FIND KEYWORD WITHIN HTML
 
-    if (html.toLowerCase().contains(keyword)){
+    if (sb.toString().toLowerCase().contains(keyword)){
         notify(success_notification_message);
     } else {
         notify(fails_notification_message);
@@ -47,7 +50,6 @@ public class App{
   }
 
   static void notify(String message) throws Exception{
-        System.out.println(message);
         String[] cmd = {"/usr/bin/notify-send",
                    "-t",
                    "10000",
